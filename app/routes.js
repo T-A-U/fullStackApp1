@@ -1,3 +1,5 @@
+const { result } = require("lodash");
+
 module.exports = function(app, passport, db) {
 
 // normal routes ===============================================================
@@ -19,20 +21,34 @@ module.exports = function(app, passport, db) {
     });
 //justin helped, shown this article https://www.mongodb.com/resources/languages/express-mongodb-rest-api-tutorial
 //After that Michael helped a lot, now I need to make it show up in the DOM
+//then justin helped with getting the logic
     app.get('/getZeldaGames/:zelda2', isLoggedIn,async function(req, res) {
+      let year = req.params.zelda2
       let collection = await db.collection('Titles');
       let results = await collection.find({}).toArray()
-      console.log(results)
-      // console.log(Object.keys(results[0]) .includes("Zelda"))
-      console.log(req)
-      const foundData = Object.keys(results[0])
-      .filter(key => key.includes("Zelda")&& new Date(results[0][key])<=new Date(parseInt(req.params.zelda2),12,31))
-      console.log(foundData)
-      const first = foundData.sort((keyA,keyB) => new Date (results[0][keyA]) <= new Date(results[0][keyB])? 1:-1)[0]
-      console.log(first)
-      console.log(foundData)
-      res.send(first).status(200);
+      let arrayOfResults = Object.values(results[0])
+      let resObj
+      arrayOfResults.forEach((e,i) => {
+        if(+e === +year){
+          resObj = Object.keys(results[0])[i]
+        }
+      })
+      if(!resObj) resObj = 'No Games released this year!'
+      console.log(resObj)
+      res.send(resObj).status(200)
+      // res.send().status(200);
+      // res.render('index.ejs');
+      
   });
+
+
+
+      //   const foundData = Object.keys(results[0])
+      // .filter(key => key.includes("Zelda")&& new Date(results[0][key])<=new Date(parseInt(req.params.zelda2),12,31))
+      // console.log(foundData)
+      // const first = foundData.sort((keyA,keyB) => new Date (results[0][keyA]) <= new Date(results[0][keyB])? 1:-1)[0]
+      // console.log(first)
+      // console.log(foundData)
 
     // LOGOUT ==============================
     app.get('/logout', function(req, res) {
