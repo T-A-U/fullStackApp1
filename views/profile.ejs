@@ -21,7 +21,7 @@
             <div class="well">
                 <h3><span class="fa fa-user"></span> Local</h3>
 
-                <% if (user.local.email) { %>
+                <% if(user.local.email) { %>
                     <p>
                         <strong>id</strong>: <%= user._id %><br>
                         <strong>email</strong>: <%= user.local.email %><br>
@@ -52,12 +52,37 @@
 
           <h2>Year</h2>
           <h2 id="game"></h2>
-          <h3>(Game will show up in inspect -> network tab currently)</h3>
+          <!-- <h3>(Game will show up in inspect -> network tab currently)</h3> -->
+        <div id="commentSection">
+            <p id="comments"></p>
+            <form id="userInput">
+                <input type="text" placeholder="comment here" id="addComment">
+                 <input id="commentOwner" type="hidden" value="<%= user._id %>" >
+                <button id="submitComment">comment</button>
+            </form>
+
+        </div>
           <div>
             <input type="text" id="year">
             <button id = "submitYear" >Submit</button>
           </div>
-        
+
+        <h3>Comments</h3>
+  <ul class="comments">
+  <% for(var i=0; i<comments.length; i++) {%>
+    <li class="comments">
+      <!-- justin helped with below line -->
+      <span><%= comments[i].owner %></span> 
+      <span></span>
+      <!-- justin helped with below line -->
+      <span><%= comments[i].comment %></span> 
+      <span><%= comments[i].game %></span>
+      <!-- <span><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
+      <span><i class="fa fa-thumbs-down" aria-hidden="true"></i></span> -->
+      <span><i class="fa fa-trash" aria-hidden="true"></i></span>
+    </li>
+  <% } %>
+  </ul>
 
 </div>
 

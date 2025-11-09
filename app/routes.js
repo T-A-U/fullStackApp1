@@ -10,15 +10,21 @@ module.exports = function(app, passport, db) {
     });
 
     // PROFILE SECTION =========================
-    app.get('/profile', isLoggedIn, function(req, res) {
-        db.collection('messages').find().toArray((err, result) => {
-          if (err) return console.log(err)
-          res.render('profile.ejs', {
-            user : req.user,
-            messages: result
-          })
+   app.get('/profile', isLoggedIn, function(req, res) { // commented same route in server.js
+    db.collection('messages').find().toArray((err, messages) => {
+      if (err) return console.log(err)
+      
+      db.collection('Comments').find().toArray((err, comments) => {   //Added this
+        if (err) return console.log(err)
+        
+        res.render('profile.ejs', {
+          user: req.user,
+          messages: messages,
+          comments: comments || []
         })
-    });
+      })
+    })
+});
 //justin helped, shown this article https://www.mongodb.com/resources/languages/express-mongodb-rest-api-tutorial
 //After that Michael helped a lot, now I need to make it show up in the DOM
 //then justin helped with getting the logic
